@@ -14,7 +14,8 @@ How to use:
 - Open terminal/command line, and navigate to the .py file.
 - Type 'python MODISFileRename.py [product] [folder]
 
-product: string; the product name given in the current file name (example: MOD13Q1, or if two products, MCD43A4_MCD43A2)
+product: string; the product name given in the current file name (example: MOD13Q1, or if two products, MCD43A4_MCD43A2).
+
 folder: string; path to the folder where subsets are downloaded ("." if current directory)
 
 
