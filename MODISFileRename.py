@@ -2,11 +2,11 @@ import os, sys
 
 oldproduct = "_" + sys.argv[1] + ".asc"
 newproduct = "___" + sys.argv[1] + ".asc"
-directory = sys.argv[2]
+directory = os.path.abspath(sys.argv[2])
 
-for filename in os.listdir("."):
-	if filename.endswith(product):
-		x = filename.find(product)
+for filename in os.listdir(directory):
+	if filename.endswith(oldproduct):
+		x = filename.find(oldproduct)
 		newname = filename[:x]
 		newname = newname + newproduct
-		os.rename(filename, newname)
+		os.rename(os.path.join(directory,filename), os.path.join(directory, newname))
