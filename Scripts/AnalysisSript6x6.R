@@ -5,8 +5,17 @@ library(MuMIn)
 
 # setwd()
 
-source("/Users/hp1111/PhD/AdriannasFunctions/model_plot.R")
 source("~/Scripts/creating_weight_matrix.R")
+
+
+model_plot <- function(mod.for.plot){
+	par(mfrow = c(1,3))
+	qqnorm(resid(mod.for.plot))
+	qqline(resid(mod.for.plot), col = 2)
+  	plot(fitted(mod.for.plot), resid(mod.for.plot),xlab = "Fitted Values", ylab = "Residuals", main = "Residuals vs fitted")
+  	abline(h=0, lty=2)
+  	lines(smooth.spline(fitted(mod.for.plot), resid(mod.for.plot)), col = "red")
+	hist(resid(mod.for.plot))}
 
 
 
@@ -201,6 +210,7 @@ PRED.e2b <- glmer(Species_richness ~ Arith.EVI.yield + Higher_taxon + (1|SS), da
 anova(PRED.e2, PRED.e2b) ## significant
 
 summary(PRED.e2)
+model_plot(PRED.e2)
 r.squaredGLMM(PRED.e2)
 
 pdf(file.path("Figures", "EVITile", "ARITH_yield.pdf"))
@@ -217,6 +227,7 @@ PRED.e3b <- glmer(Species_richness ~ Arith.max.EVI + Higher_taxon + (1|SS), data
 anova(PRED.e3, PRED.e3b) ## significant
 
 summary(PRED.e3)
+model_plot(PRED.e3)
 r.squaredGLMM(PRED.e3)
 
 pdf(file.path("Figures", "EVITile", "ARITH_Max.pdf"))
@@ -238,6 +249,7 @@ PRED.e4 <- glmer(Species_richness ~ Weighted.mean.EVI * Higher_taxon + (1|SS), d
 PRED.e4b <- glmer(Species_richness ~ Weighted.mean.EVI + Higher_taxon + (1|SS), data = PRED, family = poisson, control = glmerControl(optimizer="bobyqa", optCtrl = list(maxfun = 100000)))
 anova(PRED.e4, PRED.e4b) # significant
 summary(PRED.e4)
+model_plot(PRED.e4)
 r.squaredGLMM(PRED.e4)
 
 pdf(file.path("Figures", "EVITile", "WEIGHTED_Mean.pdf"))
@@ -255,6 +267,7 @@ PRED.e5 <- glmer(Species_richness ~ Weighted.EVI.yield * Higher_taxon + (1|SS), 
 PRED.e5b <- glmer(Species_richness ~ Weighted.EVI.yield + Higher_taxon + (1|SS), data = PRED, family = poisson, control = glmerControl(optimizer="bobyqa", optCtrl = list(maxfun = 100000)))
 anova(PRED.e5, PRED.e5b) ## significant
 summary(PRED.e5)
+model_plot(PRED.e5)
 r.squaredGLMM(PRED.e5)
 
 pdf(file.path("Figures", "EVITile", "WEIGHTED_yield.pdf"))
@@ -270,6 +283,7 @@ PRED.e6 <- glmer(Species_richness ~ Weighted.max.EVI * Higher_taxon + (1|SS), da
 PRED.e6b <- glmer(Species_richness ~ Weighted.max.EVI + Higher_taxon + (1|SS), data = PRED, family = poisson, control = glmerControl(optimizer="bobyqa", optCtrl = list(maxfun = 100000)))
 anova(PRED.e6, PRED.e6b) ## significant
 summary(PRED.e6)
+model_plot(PRED.e6)
 r.squaredGLMM(PRED.e6)
 
 
@@ -337,6 +351,8 @@ PRED.n1b <- glmer(Species_richness ~ Arith.NDVI.mean + Higher_taxon + (1|SS), da
 anova(PRED.n1, PRED.n1b) # significant
 
 summary(PRED.n1)
+model_plot(PRED.n1)
+
 r.squaredGLMM(PRED.n1)
 
 pdf(file.path("Figures", "NDVITile", "ARITH_Mean.pdf"))
@@ -356,6 +372,7 @@ PRED.n2b <- glmer(Species_richness ~ Arith.NDVI.yield + Higher_taxon + (1|SS), d
 anova(PRED.n2, PRED.n2b) ## significant
 
 summary(PRED.n2)
+model_plot(PRED.n2)
 r.squaredGLMM(PRED.n2)
 
 pdf(file.path("Figures", "NDVITile", "ARITH_yield.pdf"))
@@ -370,6 +387,7 @@ PRED.n3 <- glmer(Species_richness ~ Arith.max.NDVI * Higher_taxon + (1|SS), data
 PRED.n3b <- glmer(Species_richness ~ Arith.max.NDVI + Higher_taxon + (1|SS), data = PRED, family = poisson, control = glmerControl(optimizer="bobyqa", optCtrl = list(maxfun = 100000)))
 anova(PRED.n3, PRED.n3b) ## significant
 summary(PRED.n3)
+model_plot(PRED.n3)
 r.squaredGLMM(PRED.n3)
 
 pdf(file.path("Figures", "NDVITile", "ARITH_max.pdf"))
@@ -388,6 +406,7 @@ PRED.n4 <- glmer(Species_richness ~ Weighted.mean.NDVI * Higher_taxon + (1|SS), 
 PRED.n4b <- glmer(Species_richness ~ Weighted.mean.NDVI + Higher_taxon + (1|SS), data = PRED, family = poisson, control = glmerControl(optimizer="bobyqa", optCtrl = list(maxfun = 100000)))
 anova(PRED.n4, PRED.n4b) # significant
 summary(PRED.n4)
+model_plot(PRED.n4)
 r.squaredGLMM(PRED.n4)
 
 pdf(file.path("Figures", "NDVITile", "WEIGHTED_mean.pdf"))
@@ -404,6 +423,7 @@ PRED.n5 <- glmer(Species_richness ~ Weighted.NDVI.yield * Higher_taxon + (1|SS),
 PRED.n5b <- glmer(Species_richness ~ Weighted.NDVI.yield + Higher_taxon + (1|SS), data = PRED, family = poisson, control = glmerControl(optimizer="bobyqa", optCtrl = list(maxfun = 100000)))
 anova(PRED.n5, PRED.n5b) ## significant
 summary(PRED.n5)
+model_plot(PRED.n5)
 r.squaredGLMM(PRED.n5)
 
 
@@ -420,6 +440,7 @@ PRED.n6 <- glmer(Species_richness ~ Weighted.max.NDVI * Higher_taxon + (1|SS), d
 PRED.n6b <- glmer(Species_richness ~ Weighted.max.NDVI + Higher_taxon + (1|SS), data = PRED, family = poisson, control = glmerControl(optimizer="bobyqa", optCtrl = list(maxfun = 100000)))
 anova(PRED.e6, PRED.e6b) ## significant
 summary(PRED.n6)
+model_plot(PRED.n6)
 r.squaredGLMM(PRED.n6)
 
 

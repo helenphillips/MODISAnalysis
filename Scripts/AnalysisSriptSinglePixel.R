@@ -7,7 +7,14 @@ library(MuMIn) ## for RsquareGLMM function
 library(car) ## for Anova function
 
 ## library(roquefort) - for plotting. Not publically available
-source("/Users/hp1111/PhD/AdriannasFunctions/model_plot.R")
+model_plot <- function(mod.for.plot){
+	par(mfrow = c(1,3))
+	qqnorm(resid(mod.for.plot))
+	qqline(resid(mod.for.plot), col = 2)
+  	plot(fitted(mod.for.plot), resid(mod.for.plot),xlab = "Fitted Values", ylab = "Residuals", main = "Residuals vs fitted")
+  	abline(h=0, lty=2)
+  	lines(smooth.spline(fitted(mod.for.plot), resid(mod.for.plot)), col = "red")
+	hist(resid(mod.for.plot))}
 
 
 file <- list.files(path = "MOD13Q1_IndividualPixel", pattern = "^MODIS_Data") ## The file that begins MODIS_Data is the original data with MODIS appended
@@ -125,7 +132,7 @@ PREDICTS.e1b <- glmer(Species_richness ~ EVI.mean.band + Higher_taxon + (1|SS), 
 anova(PREDICTS.e1, PREDICTS.e1b) ## p value < 0.05 need interaction
 
 summary(PREDICTS.e1)
-model_plots(PREDICTS.e1)
+model_plot(PREDICTS.e1)
 
 pdf(file.path("Figures", "EVISinglePixel", "Mean.pdf"))
 PlotContEffects(PREDICTS.e1, data = PREDICTS,effects = "EVI.mean.band", xlab = "Mean EVI", ylab = "Species Richness", 
@@ -151,6 +158,7 @@ PlotContEffects(PREDICTS.e2, data = PREDICTS,effects = "EVI.max.band", xlab = "M
 legend("topleft", legend = levels(PREDICTS$Higher_taxon), col = cols_higher_taxon, lwd = 4)
 dev.off()
 summary(PREDICTS.e2)
+model_plot(PREDICTS.e2)
 r.squaredGLMM(PREDICTS.e2)
       # R2m       R2c 
 # 0.6022174 0.7996292 
@@ -169,6 +177,7 @@ anova(PREDICTS.e3b, PREDICTS.e3d) ## do need yield
 # Stick with the additive model
 
 summary(PREDICTS.e3b)
+model_plot(PREDICTS.e3b)
 
 pdf(file.path("Figures", "EVISinglePixel", "Yield.pdf"))
 PlotContEffects(PREDICTS.e3b, data = PREDICTS,effects = "EVI.band.yield", otherFactors = list(Higher_taxon = levels(PREDICTS$Higher_taxon)[1]), xlab = "EVI yield", ylab = "Species Richness", byFactor=NULL, logLink="e",plotRug=FALSE,seMultiplier=1.96, params=list(),axis.log="y",ylim=NULL,line.cols=cols_higher_taxon)
@@ -189,6 +198,8 @@ PREDICTS.n1b <- glmer(Species_richness ~ NDVI.mean.band + Higher_taxon + (1|SS),
 anova(PREDICTS.n1, PREDICTS.n1b) ## Significantly different
 
 summary(PREDICTS.n1)
+model_plot(PREDICTS.n1)
+
 r.squaredGLMM(PREDICTS.n1)
       # R2m       R2c 
 # 0.5696208 0.8253525
@@ -209,6 +220,8 @@ PREDICTS.n2b <- glmer(Species_richness ~ NDVI.max.band + Higher_taxon + (1|SS), 
 anova(PREDICTS.n2, PREDICTS.n2b) ## significantly different
 
 summary(PREDICTS.n2)
+model_plot(PREDICTS.n2)
+
 r.squaredGLMM(PREDICTS.n2)
       # R2m       R2c 
 # 0.5954573 0.8041141 
@@ -233,6 +246,8 @@ anova(PREDICTS.n3b, PREDICTS.n3d) # can't remove
 # Stick with additive model
 
 summary(PREDICTS.n3b)
+model_plot(PREDICTS.n3b)
+
 r.squaredGLMM(PREDICTS.n3b)
 
 pdf(file.path("Figures", "NDVISinglePixel", "Yield.pdf"))
