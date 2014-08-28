@@ -1,9 +1,7 @@
 ## Analysis done on a MAC computer (10.8.5).
 
-# Sys.setenv(PATH=paste(Sys.getenv("PATH"),"/usr/texbin",sep=":")) 
 
-library(devtools)
-install_github("MODISTools", "seantuck12", ref = "master") # Has author ID and UpdateSubsets fix
+
 library(MODISTools)
 
 sessionInfo()
@@ -12,7 +10,7 @@ sessionInfo()
 ## setwd()
 
 
-dat <- read.csv("Data/TemperateSites_2014-08-14.csv")
+dat <- read.csv("Data/DummyDataset_2014-08-28.csv")
 
 
 ## Making column names match what is needed by MODISTools

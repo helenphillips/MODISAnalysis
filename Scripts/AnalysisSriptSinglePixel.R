@@ -99,8 +99,7 @@ plot(PREDICTS$NDVI.band.yield, col = PREDICTS$Source_ID, ylab = "NDVI", main = "
 ## As technically the data points are nested within each source, it will also deal with that
 
 ## How many publications are in the dataset
-length(unique(PREDICTS$Source_ID))
-length(unique(paste(PREDICTS$Source_ID, PREDICTS$Study_number))) ## Same number of studies and sources, so random effects will only need the one
+length(unique(paste(PREDICTS$SS))) 
 
 plot(PREDICTS$EVI.mean.band, PREDICTS$NDVI.mean.band, xlab = "EVI", ylab = "NDVI")
 abline(a=0, b=1)
