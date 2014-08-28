@@ -120,60 +120,60 @@ dir.create(file.path("Figures", "SupplementaryFigures"))
 
 ## EVI mean
 cols_higher_taxon <- c("#000000", "#9932CC", "#FFD700", "#006400")
-VIs.e1 <- glmer(Species_richness ~ EVI.mean.band * Higher_taxon + (1|SS), data = PREDICTS, family = poisson, control = glmerControl(optimizer="bobyqa", optCtrl = list(maxfun = 100000)))
-VIs.e1b <- glmer(Species_richness ~ EVI.mean.band + Higher_taxon + (1|SS), data = PREDICTS, family = poisson, control = glmerControl(optimizer="bobyqa", optCtrl = list(maxfun = 100000)))
-anova(VIs.e1, VIs.e1b) ## p value < 0.05 need interaction
+PREDICTS.e1 <- glmer(Species_richness ~ EVI.mean.band * Higher_taxon + (1|SS), data = PREDICTS, family = poisson, control = glmerControl(optimizer="bobyqa", optCtrl = list(maxfun = 100000)))
+PREDICTS.e1b <- glmer(Species_richness ~ EVI.mean.band + Higher_taxon + (1|SS), data = PREDICTS, family = poisson, control = glmerControl(optimizer="bobyqa", optCtrl = list(maxfun = 100000)))
+anova(PREDICTS.e1, PREDICTS.e1b) ## p value < 0.05 need interaction
 
-summary(VIs.e1)
-model_plots(VIs.e1)
+summary(PREDICTS.e1)
+model_plots(PREDICTS.e1)
 
 pdf(file.path("Figures", "EVISinglePixel", "Mean.pdf"))
-PlotContEffects(VIs.e1, data = PREDICTS,effects = "EVI.mean.band", xlab = "Mean EVI", ylab = "Species Richness", 
+PlotContEffects(PREDICTS.e1, data = PREDICTS,effects = "EVI.mean.band", xlab = "Mean EVI", ylab = "Species Richness", 
 	byFactor="Higher_taxon", logLink="e",plotRug=FALSE,seMultiplier=1.96, params=list(),axis.log="y",ylim=NULL,
 	line.cols=cols_higher_taxon)
 legend("topleft", legend = levels(PREDICTS$Higher_taxon), col = cols_higher_taxon, lwd = 4)
 dev.off()
-r.squaredGLMM(VIs.e1) # 
+r.squaredGLMM(PREDICTS.e1) # 
       # R2m       R2c 
 # 0.5871584 0.8097819
 
 
 ## EVI max
 
-VIs.e2 <- glmer(Species_richness ~  Higher_taxon * EVI.max.band + (1|SS), data = PREDICTS, family = poisson, control = glmerControl(optimizer="bobyqa", optCtrl = list(maxfun = 100000)))
-VIs.e2b <- glmer(Species_richness ~ EVI.max.band + Higher_taxon + (1|SS), data = PREDICTS, family = poisson, control = glmerControl(optimizer="bobyqa", optCtrl = list(maxfun = 100000)))
-anova(VIs.e2, VIs.e2b) ## need interaction
+PREDICTS.e2 <- glmer(Species_richness ~  Higher_taxon * EVI.max.band + (1|SS), data = PREDICTS, family = poisson, control = glmerControl(optimizer="bobyqa", optCtrl = list(maxfun = 100000)))
+PREDICTS.e2b <- glmer(Species_richness ~ EVI.max.band + Higher_taxon + (1|SS), data = PREDICTS, family = poisson, control = glmerControl(optimizer="bobyqa", optCtrl = list(maxfun = 100000)))
+anova(PREDICTS.e2, PREDICTS.e2b) ## need interaction
 
 pdf(file.path("Figures", "EVISinglePixel", "Max.pdf"))
-PlotContEffects(VIs.e2, data = PREDICTS,effects = "EVI.max.band", xlab = "Maximum EVI", ylab = "Species Richness", 
+PlotContEffects(PREDICTS.e2, data = PREDICTS,effects = "EVI.max.band", xlab = "Maximum EVI", ylab = "Species Richness", 
 	byFactor="Higher_taxon", logLink="e",plotRug=FALSE,seMultiplier=1.96, params=list(),axis.log="y",ylim=NULL,
 	line.cols=cols_higher_taxon)
 legend("topleft", legend = levels(PREDICTS$Higher_taxon), col = cols_higher_taxon, lwd = 4)
 dev.off()
-summary(VIs.e2)
-r.squaredGLMM(VIs.e2)
+summary(PREDICTS.e2)
+r.squaredGLMM(PREDICTS.e2)
       # R2m       R2c 
 # 0.6022174 0.7996292 
 
 
 ### EVI yield
 
-VIs.e3 <- glmer(Species_richness ~ EVI.band.yield * Higher_taxon + (1|SS), data = PREDICTS, family = poisson, control = glmerControl(optimizer="bobyqa", optCtrl = list(maxfun = 100000)))
-VIs.e3b <- glmer(Species_richness ~ EVI.band.yield + Higher_taxon + (1|SS), data = PREDICTS, family = poisson, control = glmerControl(optimizer="bobyqa", optCtrl = list(maxfun = 100000)))
-anova(VIs.e3, VIs.e3b) ## not significant ( p > 0.05)
+PREDICTS.e3 <- glmer(Species_richness ~ EVI.band.yield * Higher_taxon + (1|SS), data = PREDICTS, family = poisson, control = glmerControl(optimizer="bobyqa", optCtrl = list(maxfun = 100000)))
+PREDICTS.e3b <- glmer(Species_richness ~ EVI.band.yield + Higher_taxon + (1|SS), data = PREDICTS, family = poisson, control = glmerControl(optimizer="bobyqa", optCtrl = list(maxfun = 100000)))
+anova(PREDICTS.e3, PREDICTS.e3b) ## not significant ( p > 0.05)
 
-VIs.e3c <- glmer(Species_richness ~ EVI.band.yield + (1|SS), data = PREDICTS, family = poisson, control = glmerControl(optimizer="bobyqa", optCtrl = list(maxfun = 100000)))
-anova(VIs.e3b, VIs.e3c) ## Need higher taxa
-VIs.e3d <- glmer(Species_richness ~ Higher_taxon + (1|SS), data = PREDICTS, family = poisson, control = glmerControl(optimizer="bobyqa", optCtrl = list(maxfun = 100000)))
-anova(VIs.e3b, VIs.e3d) ## do need yield
+PREDICTS.e3c <- glmer(Species_richness ~ EVI.band.yield + (1|SS), data = PREDICTS, family = poisson, control = glmerControl(optimizer="bobyqa", optCtrl = list(maxfun = 100000)))
+anova(PREDICTS.e3b, PREDICTS.e3c) ## Need higher taxa
+PREDICTS.e3d <- glmer(Species_richness ~ Higher_taxon + (1|SS), data = PREDICTS, family = poisson, control = glmerControl(optimizer="bobyqa", optCtrl = list(maxfun = 100000)))
+anova(PREDICTS.e3b, PREDICTS.e3d) ## do need yield
 # Stick with the additive model
 
-summary(VIs.e3b)
+summary(PREDICTS.e3b)
 
 pdf(file.path("Figures", "EVISinglePixel", "Yield.pdf"))
-PlotContEffects(VIs.e3b, data = PREDICTS,effects = "EVI.band.yield", otherFactors = list(Higher_taxon = levels(PREDICTS$Higher_taxon)[1]), xlab = "EVI yield", ylab = "Species Richness", byFactor=NULL, logLink="e",plotRug=FALSE,seMultiplier=1.96, params=list(),axis.log="y",ylim=NULL,line.cols=cols_higher_taxon)
+PlotContEffects(PREDICTS.e3b, data = PREDICTS,effects = "EVI.band.yield", otherFactors = list(Higher_taxon = levels(PREDICTS$Higher_taxon)[1]), xlab = "EVI yield", ylab = "Species Richness", byFactor=NULL, logLink="e",plotRug=FALSE,seMultiplier=1.96, params=list(),axis.log="y",ylim=NULL,line.cols=cols_higher_taxon)
 dev.off()
-r.squaredGLMM(VIs.e2b)
+r.squaredGLMM(PREDICTS.e2b)
       # R2m       R2c 
 # 0.5774434 0.8018797 
 
@@ -184,17 +184,17 @@ r.squaredGLMM(VIs.e2b)
 ### NDVI
 #Mean
 
-VIs.n1 <- glmer(Species_richness ~ NDVI.mean.band * Higher_taxon + (1|SS), data = PREDICTS, family = poisson, control = glmerControl(optimizer="bobyqa", optCtrl = list(maxfun = 100000)))
-VIs.n1b <- glmer(Species_richness ~ NDVI.mean.band + Higher_taxon + (1|SS), data = PREDICTS, family = poisson, control = glmerControl(optimizer="bobyqa", optCtrl = list(maxfun = 100000)))
-anova(VIs.n1, VIs.n1b) ## Significantly different
+PREDICTS.n1 <- glmer(Species_richness ~ NDVI.mean.band * Higher_taxon + (1|SS), data = PREDICTS, family = poisson, control = glmerControl(optimizer="bobyqa", optCtrl = list(maxfun = 100000)))
+PREDICTS.n1b <- glmer(Species_richness ~ NDVI.mean.band + Higher_taxon + (1|SS), data = PREDICTS, family = poisson, control = glmerControl(optimizer="bobyqa", optCtrl = list(maxfun = 100000)))
+anova(PREDICTS.n1, PREDICTS.n1b) ## Significantly different
 
-summary(VIs.n1)
-r.squaredGLMM(VIs.n1)
+summary(PREDICTS.n1)
+r.squaredGLMM(PREDICTS.n1)
       # R2m       R2c 
 # 0.5696208 0.8253525
 
 pdf(file.path("Figures", "NDVISinglePixel", "Mean.pdf"))
-PlotContEffects(VIs.n1, data = PREDICTS,effects = "NDVI.mean.band", xlab = "mean NDVI", ylab = "Species Richness", 
+PlotContEffects(PREDICTS.n1, data = PREDICTS,effects = "NDVI.mean.band", xlab = "mean NDVI", ylab = "Species Richness", 
 	byFactor="Higher_taxon", logLink="e",plotRug=FALSE,seMultiplier=1.96, params=list(),axis.log="y",ylim=NULL,
 	line.cols=cols_higher_taxon)
 legend("topleft", legend = levels(PREDICTS$Higher_taxon), col = cols_higher_taxon, lwd = 4)
@@ -204,17 +204,17 @@ dev.off()
 # Max
 
 
-VIs.n2 <- glmer(Species_richness ~ NDVI.max.band * Higher_taxon + (1|SS), data = PREDICTS, family = poisson, control = glmerControl(optimizer="bobyqa", optCtrl = list(maxfun = 100000)))
-VIs.n2b <- glmer(Species_richness ~ NDVI.max.band + Higher_taxon + (1|SS), data = PREDICTS, family = poisson, control = glmerControl(optimizer="bobyqa", optCtrl = list(maxfun = 100000)))
-anova(VIs.n2, VIs.n2b) ## significantly different
+PREDICTS.n2 <- glmer(Species_richness ~ NDVI.max.band * Higher_taxon + (1|SS), data = PREDICTS, family = poisson, control = glmerControl(optimizer="bobyqa", optCtrl = list(maxfun = 100000)))
+PREDICTS.n2b <- glmer(Species_richness ~ NDVI.max.band + Higher_taxon + (1|SS), data = PREDICTS, family = poisson, control = glmerControl(optimizer="bobyqa", optCtrl = list(maxfun = 100000)))
+anova(PREDICTS.n2, PREDICTS.n2b) ## significantly different
 
-summary(VIs.n2)
-r.squaredGLMM(VIs.n2)
+summary(PREDICTS.n2)
+r.squaredGLMM(PREDICTS.n2)
       # R2m       R2c 
 # 0.5954573 0.8041141 
 
 pdf(file.path("Figures", "NDVISinglePixel", "Max.pdf"))
-PlotContEffects(VIs.n2, data = PREDICTS,effects = "NDVI.max.band", xlab = "Maximum NDVI", ylab = "Species Richness", 
+PlotContEffects(PREDICTS.n2, data = PREDICTS,effects = "NDVI.max.band", xlab = "Maximum NDVI", ylab = "Species Richness", 
 	byFactor="Higher_taxon", logLink="e",plotRug=FALSE,seMultiplier=1.96, params=list(),axis.log="y",ylim=NULL,
 	line.cols=cols_higher_taxon)
 legend("topleft", legend = levels(PREDICTS$Higher_taxon), col = cols_higher_taxon, lwd = 4)
@@ -222,61 +222,61 @@ dev.off()
 
 # Yield
 
-VIs.n3 <- glmer(Species_richness ~ NDVI.band.yield * Higher_taxon + (1|SS), data = PREDICTS, family = poisson, control = glmerControl(optimizer="bobyqa", optCtrl = list(maxfun = 100000)))
-VIs.n3b <- glmer(Species_richness ~ NDVI.band.yield + Higher_taxon + (1|SS), data = PREDICTS, family = poisson, control = glmerControl(optimizer="bobyqa", optCtrl = list(maxfun = 100000)))
-anova(VIs.n3, VIs.n3b) ## don't need interaction
+PREDICTS.n3 <- glmer(Species_richness ~ NDVI.band.yield * Higher_taxon + (1|SS), data = PREDICTS, family = poisson, control = glmerControl(optimizer="bobyqa", optCtrl = list(maxfun = 100000)))
+PREDICTS.n3b <- glmer(Species_richness ~ NDVI.band.yield + Higher_taxon + (1|SS), data = PREDICTS, family = poisson, control = glmerControl(optimizer="bobyqa", optCtrl = list(maxfun = 100000)))
+anova(PREDICTS.n3, PREDICTS.n3b) ## don't need interaction
 
-VIs.n3c <- glmer(Species_richness ~ NDVI.band.yield + (1|SS), data = PREDICTS, family = poisson, control = glmerControl(optimizer="bobyqa", optCtrl = list(maxfun = 100000))) 
-anova(VIs.n3b, VIs.n3c) # can't remove
-VIs.n3d <- glmer(Species_richness ~ Higher_taxon + (1|SS), data = PREDICTS, family = poisson, control = glmerControl(optimizer="bobyqa", optCtrl = list(maxfun = 100000)))
-anova(VIs.n3b, VIs.n3d) # can't remove
+PREDICTS.n3c <- glmer(Species_richness ~ NDVI.band.yield + (1|SS), data = PREDICTS, family = poisson, control = glmerControl(optimizer="bobyqa", optCtrl = list(maxfun = 100000))) 
+anova(PREDICTS.n3b, PREDICTS.n3c) # can't remove
+PREDICTS.n3d <- glmer(Species_richness ~ Higher_taxon + (1|SS), data = PREDICTS, family = poisson, control = glmerControl(optimizer="bobyqa", optCtrl = list(maxfun = 100000)))
+anova(PREDICTS.n3b, PREDICTS.n3d) # can't remove
 # Stick with additive model
 
-summary(VIs.n3b)
-r.squaredGLMM(VIs.n3b)
+summary(PREDICTS.n3b)
+r.squaredGLMM(PREDICTS.n3b)
 
 pdf(file.path("Figures", "NDVISinglePixel", "Yield.pdf"))
-PlotContEffects(VIs.n3b, data = PREDICTS,effects = "NDVI.band.yield", otherFactors = list(Higher_taxon = levels(PREDICTS$Higher_taxon)[1]), xlab = "NDVI yield", ylab = "Species Richness", byFactor=NULL, logLink="e",plotRug=FALSE,seMultiplier=1.96, params=list(),axis.log="y",ylim=NULL,line.cols=cols_higher_taxon)
+PlotContEffects(PREDICTS.n3b, data = PREDICTS,effects = "NDVI.band.yield", otherFactors = list(Higher_taxon = levels(PREDICTS$Higher_taxon)[1]), xlab = "NDVI yield", ylab = "Species Richness", byFactor=NULL, logLink="e",plotRug=FALSE,seMultiplier=1.96, params=list(),axis.log="y",ylim=NULL,line.cols=cols_higher_taxon)
 dev.off()
 
 
 
 
 ## Creating supplementary figures
-pdf(file.path("Figures", "SupplementaryFigures", "SinglePixels.pdf"))
+pdf(file.path("Figures", "SupplementaryFigures", "SinglePixels.pdf"), height = 11.7, width = 8.3)
 par(mfrow = c(3, 2))
-PlotContEffects(VIs.e1, data = PREDICTS,effects = "EVI.mean.band", xlab = "Mean EVI", ylab = "Species Richness", 
+PlotContEffects(PREDICTS.e1, data = PREDICTS,effects = "EVI.mean.band", xlab = "Mean EVI", ylab = "Species Richness", 
 	byFactor="Higher_taxon", logLink="e",plotRug=FALSE,seMultiplier=1.96, params=list(),axis.log="y",ylim=NULL,
 	line.cols=cols_higher_taxon)
 legend("topleft", legend = levels(PREDICTS$Higher_taxon), col = cols_higher_taxon, lwd = 4)
-text(0.56, 70, "(a)", cex = 1.5)
+mtext("(a) ", side=3, line=-1.5, adj=1.0, cex=1.2)
 
-PlotContEffects(VIs.n1, data = PREDICTS,effects = "NDVI.mean.band", xlab = "Mean NDVI", ylab = "Species Richness", 
+PlotContEffects(PREDICTS.n1, data = PREDICTS,effects = "NDVI.mean.band", xlab = "Mean NDVI", ylab = "Species Richness", 
 	byFactor="Higher_taxon", logLink="e",plotRug=FALSE,seMultiplier=1.96, params=list(),axis.log="y",ylim=NULL,
 	line.cols=cols_higher_taxon)
 legend("topleft", legend = levels(PREDICTS$Higher_taxon), col = cols_higher_taxon, lwd = 4)
-text(0.83, 80, "(b)", cex = 1.5)
+mtext("(b) ", side=3, line=-1.5, adj=1.0, cex=1.2)
 
 
-PlotContEffects(VIs.e2, data = PREDICTS,effects = "EVI.max.band", xlab = "Maximum EVI", ylab = "Species Richness", 
+PlotContEffects(PREDICTS.e2, data = PREDICTS,effects = "EVI.max.band", xlab = "Maximum EVI", ylab = "Species Richness", 
 	byFactor="Higher_taxon", logLink="e",plotRug=FALSE,seMultiplier=1.96, params=list(),axis.log="y",ylim=NULL,
 	line.cols=cols_higher_taxon)
 legend("topleft", legend = levels(PREDICTS$Higher_taxon), col = cols_higher_taxon, lwd = 4)
-text(0.83, 80, "(c)", cex = 1.5)
+mtext("(c) ", side=3, line=-1.5, adj=1.0, cex=1.2)
 
 
-PlotContEffects(VIs.n2, data = PREDICTS,effects = "NDVI.max.band", xlab = "Maximum NDVI", ylab = "Species Richness", 
+PlotContEffects(PREDICTS.n2, data = PREDICTS,effects = "NDVI.max.band", xlab = "Maximum NDVI", ylab = "Species Richness", 
 	byFactor="Higher_taxon", logLink="e",plotRug=FALSE,seMultiplier=1.96, params=list(),axis.log="y",ylim=NULL,
 	line.cols=cols_higher_taxon)
 legend("topleft", legend = levels(PREDICTS$Higher_taxon), col = cols_higher_taxon, lwd = 4)
-text(0.9, 70, "(d)", cex = 1.5)
+mtext("(d) ", side=3, line=-1.5, adj=1.0, cex=1.2)
 
 
-PlotContEffects(VIs.e3b, data = PREDICTS,effects = "EVI.band.yield", otherFactors = list(Higher_taxon = levels(PREDICTS$Higher_taxon)[1]), xlab = "EVI Yield", ylab = "Species Richness", byFactor=NULL, logLink="e",plotRug=FALSE,seMultiplier=1.96, params=list(),axis.log="y",ylim=NULL,line.cols=cols_higher_taxon)
-text(0.28, 18, "(e)", cex = 1.5)
+PlotContEffects(PREDICTS.e3b, data = PREDICTS,effects = "EVI.band.yield", otherFactors = list(Higher_taxon = levels(PREDICTS$Higher_taxon)[1]), xlab = "EVI Yield", ylab = "Species Richness", byFactor=NULL, logLink="e",plotRug=FALSE,seMultiplier=1.96, params=list(),axis.log="y",ylim=NULL,line.cols=cols_higher_taxon)
+mtext("(e) ", side=3, line=-1.5, adj=1.0, cex=1.2)
 
 
-PlotContEffects(VIs.n3b, data = PREDICTS,effects = "NDVI.band.yield", otherFactors = list(Higher_taxon = levels(PREDICTS$Higher_taxon)[1]), xlab = "NDVI Yield", ylab = "Species Richness", byFactor=NULL, logLink="e",plotRug=FALSE,seMultiplier=1.96, params=list(),axis.log="y",ylim=NULL,line.cols=cols_higher_taxon)
-text(0.41, 21, "(f)", cex = 1.5)
+PlotContEffects(PREDICTS.n3b, data = PREDICTS,effects = "NDVI.band.yield", otherFactors = list(Higher_taxon = levels(PREDICTS$Higher_taxon)[1]), xlab = "NDVI Yield", ylab = "Species Richness", byFactor=NULL, logLink="e",plotRug=FALSE,seMultiplier=1.96, params=list(),axis.log="y",ylim=NULL,line.cols=cols_higher_taxon)
+mtext("(f) ", side=3, line=-1.5, adj=1.0, cex=1.2)
 
 dev.off()

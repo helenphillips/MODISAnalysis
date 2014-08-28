@@ -1,10 +1,12 @@
-PREDICTSlibrary(lme4)
+library(lme4)
 library(nlme)
 library(MuMIn)
+#library(roquefort) # private library used for plotting
 
-source("/Users/hp1111/PhD/Functions/NEWplot_lmer_means.R")
+# setwd()
+
 source("/Users/hp1111/PhD/AdriannasFunctions/model_plot.R")
-source("/Users/hp1111/PhD/MODISTools Paper/Analysis/MyAnalysis/creating_weight_matrix.R")
+source("~/Scripts/creating_weight_matrix.R")
 
 
 
@@ -171,51 +173,57 @@ dir.create(file.path("Figures", "NDVITile"))
 #### EVI MODELS #####
 # Arithmetic
 
-higher_taxon_cols <- c("blue", "darkorchid", "gold", "darkgreen")
+cols_higher_taxon <- c("#000000", "#9932CC", "#FFD700", "#006400")
 
 #mean
-VI.e1 <- glmer(Species_richness ~ Arith.EVI.mean * Higher_taxon + (1|SS), data = PRED, family = poisson, control = glmerControl(optimizer="bobyqa", optCtrl = list(maxfun = 100000)))
+PRED.e1 <- glmer(Species_richness ~ Arith.EVI.mean * Higher_taxon + (1|SS), data = PRED, family = poisson, control = glmerControl(optimizer="bobyqa", optCtrl = list(maxfun = 100000)))
 
-VI.e1b <- glmer(Species_richness ~ Arith.EVI.mean + Higher_taxon + (1|SS), data = PRED, family = poisson, control = glmerControl(optimizer="bobyqa", optCtrl = list(maxfun = 100000)))
-anova(VI.e1, VI.e1b) # significant
-summary(VI.e1)
-model_plot(VI.e1)
-r.squaredGLMM(VI.e1)
+PRED.e1b <- glmer(Species_richness ~ Arith.EVI.mean + Higher_taxon + (1|SS), data = PRED, family = poisson, control = glmerControl(optimizer="bobyqa", optCtrl = list(maxfun = 100000)))
+anova(PRED.e1, PRED.e1b) # significant
+summary(PRED.e1)
+model_plot(PRED.e1)
+r.squaredGLMM(PRED.e1)
 
 pdf(file.path("Figures", "EVITile", "ARITH_mean.pdf"))
-NEWplot_lmer_means(VI.e1, var.of.interest = "Arith.EVI.mean", var.interaction = "Higher_taxon", length = 50, ylabel = "Species Richness", xlabel = "Mean EVI (arithmetic mean)", CIcol = higher_taxon_cols, meancol = higher_taxon_cols, line.width = 2)
-legend("topright", legend = levels(PRED$Higher_taxon), col = higher_taxon_cols, lwd = 2)
+PlotContEffects(PRED.e1, data = PRED,effects = "Arith.EVI.mean", xlab = "Mean EVI (Arithmetic mean)", ylab = "Species Richness", 
+	byFactor="Higher_taxon", logLink="e",plotRug=FALSE,seMultiplier=1.96, params=list(),axis.log="y",ylim=NULL,
+	line.cols=cols_higher_taxon)
+legend("topleft", legend = levels(PRED$Higher_taxon), col = cols_higher_taxon, lwd = 4)
 dev.off()
 
 
 
 #yield
 
-VI.e2 <- glmer(Species_richness ~ Arith.EVI.yield * Higher_taxon + (1|SS), data = PRED, family = poisson, control = glmerControl(optimizer="bobyqa", optCtrl = list(maxfun = 100000)))
+PRED.e2 <- glmer(Species_richness ~ Arith.EVI.yield * Higher_taxon + (1|SS), data = PRED, family = poisson, control = glmerControl(optimizer="bobyqa", optCtrl = list(maxfun = 100000)))
 
-VI.e2b <- glmer(Species_richness ~ Arith.EVI.yield + Higher_taxon + (1|SS), data = PRED, family = poisson, control = glmerControl(optimizer="bobyqa", optCtrl = list(maxfun = 100000)))
-anova(VI.e2, VI.e2b) ## significant
+PRED.e2b <- glmer(Species_richness ~ Arith.EVI.yield + Higher_taxon + (1|SS), data = PRED, family = poisson, control = glmerControl(optimizer="bobyqa", optCtrl = list(maxfun = 100000)))
+anova(PRED.e2, PRED.e2b) ## significant
 
-summary(VI.e2)
-r.squaredGLMM(VI.e2)
+summary(PRED.e2)
+r.squaredGLMM(PRED.e2)
 
 pdf(file.path("Figures", "EVITile", "ARITH_yield.pdf"))
-NEWplot_lmer_means(VI.e2, var.of.interest = "Arith.EVI.yield", var.interaction = "Higher_taxon", length = 50, ylabel = "Species Richness", xlabel = "EVI yield (arithmetic mean)", CIcol = higher_taxon_cols, meancol = higher_taxon_cols, line.width = 2)
-legend("topright", legend = levels(PRED$Higher_taxon), col = higher_taxon_cols, lwd = 2)
+PlotContEffects(PRED.e2, data = PRED,effects = "Arith.EVI.yield", xlab = "EVI Yield (Arithmetic mean)", ylab = "Species Richness", 
+	byFactor="Higher_taxon", logLink="e",plotRug=FALSE,seMultiplier=1.96, params=list(),axis.log="y",ylim=NULL,
+	line.cols=cols_higher_taxon)
+legend("topleft", legend = levels(PRED$Higher_taxon), col = cols_higher_taxon, lwd = 4)
 dev.off()
 
 
 #max
-VI.e3 <- glmer(Species_richness ~ Arith.max.EVI * Higher_taxon + (1|SS), data = PRED, family = poisson, control = glmerControl(optimizer="bobyqa", optCtrl = list(maxfun = 100000)))
-VI.e3b <- glmer(Species_richness ~ Arith.max.EVI + Higher_taxon + (1|SS), data = PRED, family = poisson, control = glmerControl(optimizer="bobyqa", optCtrl = list(maxfun = 100000)))
-anova(VI.e3, VI.e3b) ## significant
+PRED.e3 <- glmer(Species_richness ~ Arith.max.EVI * Higher_taxon + (1|SS), data = PRED, family = poisson, control = glmerControl(optimizer="bobyqa", optCtrl = list(maxfun = 100000)))
+PRED.e3b <- glmer(Species_richness ~ Arith.max.EVI + Higher_taxon + (1|SS), data = PRED, family = poisson, control = glmerControl(optimizer="bobyqa", optCtrl = list(maxfun = 100000)))
+anova(PRED.e3, PRED.e3b) ## significant
 
-summary(VI.e3)
-r.squaredGLMM(VI.e3)
+summary(PRED.e3)
+r.squaredGLMM(PRED.e3)
 
 pdf(file.path("Figures", "EVITile", "ARITH_Max.pdf"))
-NEWplot_lmer_means(VI.e3, var.of.interest = "Arith.max.EVI", var.interaction = "Higher_taxon", length = 50, ylabel = "Species Richness", xlabel = "Arith.max.EVI (arithmetic mean)", CIcol = higher_taxon_cols, meancol = higher_taxon_cols, line.width = 2)
-legend("topright", legend = levels(PRED$Higher_taxon), col = higher_taxon_cols, lwd = 2)
+PlotContEffects(PRED.e3, data = PRED,effects = "Arith.max.EVI", xlab = "Max EVI (Arithmetic mean)", ylab = "Species Richness", 
+	byFactor="Higher_taxon", logLink="e",plotRug=FALSE,seMultiplier=1.96, params=list(),axis.log="y",ylim=NULL,
+	line.cols=cols_higher_taxon)
+legend("topleft", legend = levels(PRED$Higher_taxon), col = cols_higher_taxon, lwd = 4)
 dev.off()
 
 
@@ -225,45 +233,97 @@ dev.off()
 
 ## Weighted (exponential decay model)
 #mean
-VI.e4 <- glmer(Species_richness ~ Weighted.mean.EVI * Higher_taxon + (1|SS), data = PRED, family = poisson, control = glmerControl(optimizer="bobyqa", optCtrl = list(maxfun = 100000)))
+PRED.e4 <- glmer(Species_richness ~ Weighted.mean.EVI * Higher_taxon + (1|SS), data = PRED, family = poisson, control = glmerControl(optimizer="bobyqa", optCtrl = list(maxfun = 100000)))
 
-VI.e4b <- glmer(Species_richness ~ Weighted.mean.EVI + Higher_taxon + (1|SS), data = PRED, family = poisson, control = glmerControl(optimizer="bobyqa", optCtrl = list(maxfun = 100000)))
-anova(VI.e4, VI.e4b) # significant
-summary(VI.e4)
-r.squaredGLMM(VI.e4)
+PRED.e4b <- glmer(Species_richness ~ Weighted.mean.EVI + Higher_taxon + (1|SS), data = PRED, family = poisson, control = glmerControl(optimizer="bobyqa", optCtrl = list(maxfun = 100000)))
+anova(PRED.e4, PRED.e4b) # significant
+summary(PRED.e4)
+r.squaredGLMM(PRED.e4)
 
 pdf(file.path("Figures", "EVITile", "WEIGHTED_Mean.pdf"))
-NEWplot_lmer_means(VI.e4, var.of.interest = "Weighted.mean.EVI", var.interaction = "Higher_taxon", length = 50, ylabel = "Species Richness", xlabel = "Weighted mean EVI (arithmetic mean)", CIcol = higher_taxon_cols, meancol = higher_taxon_cols, line.width = 2)
-legend("topright", legend = levels(PRED$Higher_taxon), col = higher_taxon_cols, lwd = 2)
+PlotContEffects(PRED.e4, data = PRED,effects = "Weighted.mean.EVI", xlab = "Mean EVI (Weighted mean)", ylab = "Species Richness", 
+	byFactor="Higher_taxon", logLink="e",plotRug=FALSE,seMultiplier=1.96, params=list(),axis.log="y",ylim=NULL,
+	line.cols=cols_higher_taxon)
+legend("topleft", legend = levels(PRED$Higher_taxon), col = cols_higher_taxon, lwd = 4)
 dev.off()
 
 
 #yield
 
-VI.e5 <- glmer(Species_richness ~ Weighted.EVI.yield * Higher_taxon + (1|SS), data = PRED, family = poisson, control = glmerControl(optimizer="bobyqa", optCtrl = list(maxfun = 100000))) # didn't converge
+PRED.e5 <- glmer(Species_richness ~ Weighted.EVI.yield * Higher_taxon + (1|SS), data = PRED, family = poisson, control = glmerControl(optimizer="bobyqa", optCtrl = list(maxfun = 100000))) # didn't converge
 
-VI.e5b <- glmer(Species_richness ~ Weighted.EVI.yield + Higher_taxon + (1|SS), data = PRED, family = poisson, control = glmerControl(optimizer="bobyqa", optCtrl = list(maxfun = 100000)))
-anova(VI.e5, VI.e5b) ## significant
-summary(VI.e5)
-r.squaredGLMM(VI.e5)
+PRED.e5b <- glmer(Species_richness ~ Weighted.EVI.yield + Higher_taxon + (1|SS), data = PRED, family = poisson, control = glmerControl(optimizer="bobyqa", optCtrl = list(maxfun = 100000)))
+anova(PRED.e5, PRED.e5b) ## significant
+summary(PRED.e5)
+r.squaredGLMM(PRED.e5)
 
 pdf(file.path("Figures", "EVITile", "WEIGHTED_yield.pdf"))
-NEWplot_lmer_means(VI.e5, var.of.interest = "Weighted.EVI.yield", var.interaction = "Higher_taxon", length = 50, ylabel = "Species Richness", xlabel = "EVI yield (weighted mean)", CIcol = higher_taxon_cols, meancol = higher_taxon_cols, line.width = 2)
-legend("topright", legend = levels(PRED$Higher_taxon), col = higher_taxon_cols, lwd = 2)
+PlotContEffects(PRED.e5, data = PRED,effects = "Weighted.EVI.yield", xlab = "EVI yield (Weighted mean)", ylab = "Species Richness", 
+	byFactor="Higher_taxon", logLink="e",plotRug=FALSE,seMultiplier=1.96, params=list(),axis.log="y",ylim=NULL,
+	line.cols=cols_higher_taxon)
+legend("topleft", legend = levels(PRED$Higher_taxon), col = cols_higher_taxon, lwd = 4)
 dev.off()
 
 
 #max
-VI.e6 <- glmer(Species_richness ~ Weighted.max.EVI * Higher_taxon + (1|SS), data = PRED, family = poisson, control = glmerControl(optimizer="bobyqa", optCtrl = list(maxfun = 100000)))
-VI.e6b <- glmer(Species_richness ~ Weighted.max.EVI + Higher_taxon + (1|SS), data = PRED, family = poisson, control = glmerControl(optimizer="bobyqa", optCtrl = list(maxfun = 100000)))
-anova(VI.e6, VI.e6b) ## significant
-summary(VI.e6)
-r.squaredGLMM(VI.e6)
+PRED.e6 <- glmer(Species_richness ~ Weighted.max.EVI * Higher_taxon + (1|SS), data = PRED, family = poisson, control = glmerControl(optimizer="bobyqa", optCtrl = list(maxfun = 100000)))
+PRED.e6b <- glmer(Species_richness ~ Weighted.max.EVI + Higher_taxon + (1|SS), data = PRED, family = poisson, control = glmerControl(optimizer="bobyqa", optCtrl = list(maxfun = 100000)))
+anova(PRED.e6, PRED.e6b) ## significant
+summary(PRED.e6)
+r.squaredGLMM(PRED.e6)
 
 
 pdf(file.path("Figures", "EVITile", "WEIGHTED_Max.pdf"))
-NEWplot_lmer_means(VI.e6, var.of.interest = "Weighted.max.EVI", var.interaction = "Higher_taxon", length = 50, ylabel = "Species Richness", xlabel = "Max EVI (weighted mean)", CIcol = higher_taxon_cols, meancol = higher_taxon_cols, line.width = 2)
-legend("topright", legend = levels(PRED$Higher_taxon), col = higher_taxon_cols, lwd = 2)
+PlotContEffects(PRED.e6, data = PRED,effects = "Weighted.max.EVI", xlab = "Maximum EVI (Weighted mean)", ylab = "Species Richness", 
+	byFactor="Higher_taxon", logLink="e",plotRug=FALSE,seMultiplier=1.96, params=list(),axis.log="y",ylim=NULL,
+	line.cols=cols_higher_taxon)
+legend("topleft", legend = levels(PRED$Higher_taxon), col = cols_higher_taxon, lwd = 4)
+dev.off()
+
+## Supplementary figures
+pdf(file.path("Figures", "SupplementaryFigures", "EVITile.pdf"), height = 11.7, width = 8.3)
+
+par(mfrow = c(3,2))
+PlotContEffects(PRED.e3, data = PRED,effects = "Arith.max.EVI", xlab = "Maximum EVI (Arithmetic mean)", ylab = "Species Richness", 
+	byFactor="Higher_taxon", logLink="e",plotRug=FALSE,seMultiplier=1.96, params=list(),axis.log="y",ylim=NULL,
+	line.cols=cols_higher_taxon)
+legend("topleft", legend = levels(PRED$Higher_taxon), col = cols_higher_taxon, lwd = 4)
+mtext("(a) ", side=3, line=-1.5, adj=1.0, cex=1.2)
+
+
+PlotContEffects(PRED.e6, data = PRED,effects = "Weighted.max.EVI", xlab = "Maximum EVI (Weighted mean)", ylab = "Species Richness", 
+	byFactor="Higher_taxon", logLink="e",plotRug=FALSE,seMultiplier=1.96, params=list(),axis.log="y",ylim=NULL,
+	line.cols=cols_higher_taxon)
+legend("topleft", legend = levels(PRED$Higher_taxon), col = cols_higher_taxon, lwd = 4)
+mtext("(b) ", side=3, line=-1.5, adj=1.0, cex=1.2)
+
+
+PlotContEffects(PRED.e1, data = PRED,effects = "Arith.EVI.mean", xlab = "Mean EVI (Arithmetic mean)", ylab = "Species Richness", 
+	byFactor="Higher_taxon", logLink="e",plotRug=FALSE,seMultiplier=1.96, params=list(),axis.log="y",ylim=NULL,
+	line.cols=cols_higher_taxon)
+legend("topleft", legend = levels(PRED$Higher_taxon), col = cols_higher_taxon, lwd = 4)
+mtext("(c) ", side=3, line=-1.5, adj=1.0, cex=1.2)
+
+
+PlotContEffects(PRED.e4, data = PRED,effects = "Weighted.mean.EVI", xlab = "Mean EVI (Weighted mean)", ylab = "Species Richness", 
+	byFactor="Higher_taxon", logLink="e",plotRug=FALSE,seMultiplier=1.96, params=list(),axis.log="y",ylim=NULL,
+	line.cols=cols_higher_taxon)
+legend("topleft", legend = levels(PRED$Higher_taxon), col = cols_higher_taxon, lwd = 4)
+mtext("(d) ", side=3, line=-1.5, adj=1.0, cex=1.2)
+
+PlotContEffects(PRED.e2, data = PRED,effects = "Arith.EVI.yield", xlab = "EVI Yield (Arithmetic mean)", ylab = "Species Richness", 
+	byFactor="Higher_taxon", logLink="e",plotRug=FALSE,seMultiplier=1.96, params=list(),axis.log="y",ylim=NULL,
+	line.cols=cols_higher_taxon)
+legend("topleft", legend = levels(PRED$Higher_taxon), col = cols_higher_taxon, lwd = 4)
+mtext("(e) ", side=3, line=-1.5, adj=1.0, cex=1.2)
+
+
+PlotContEffects(PRED.e5, data = PRED,effects = "Weighted.EVI.yield", xlab = "EVI yield (Weighted mean)", ylab = "Species Richness", 
+	byFactor="Higher_taxon", logLink="e",plotRug=FALSE,seMultiplier=1.96, params=list(),axis.log="y",ylim=NULL,
+	line.cols=cols_higher_taxon)
+legend("topleft", legend = levels(PRED$Higher_taxon), col = cols_higher_taxon, lwd = 4)
+mtext("(f) ", side=3, line=-1.5, adj=1.0, cex=1.2)
+
 dev.off()
 
 
@@ -271,90 +331,146 @@ dev.off()
 #### NDVI MODELS ####
 # Averaged
 #mean
-VI.n1 <- glmer(Species_richness ~ Arith.NDVI.mean * Higher_taxon + (1|SS), data = PRED, family = poisson, control = glmerControl(optimizer="bobyqa", optCtrl = list(maxfun = 100000)))
+PRED.n1 <- glmer(Species_richness ~ Arith.NDVI.mean * Higher_taxon + (1|SS), data = PRED, family = poisson, control = glmerControl(optimizer="bobyqa", optCtrl = list(maxfun = 100000)))
 
-VI.n1b <- glmer(Species_richness ~ Arith.NDVI.mean + Higher_taxon + (1|SS), data = PRED, family = poisson, control = glmerControl(optimizer="bobyqa", optCtrl = list(maxfun = 100000)))
-anova(VI.n1, VI.n1b) # significant
+PRED.n1b <- glmer(Species_richness ~ Arith.NDVI.mean + Higher_taxon + (1|SS), data = PRED, family = poisson, control = glmerControl(optimizer="bobyqa", optCtrl = list(maxfun = 100000)))
+anova(PRED.n1, PRED.n1b) # significant
 
-summary(VI.n1)
-r.squaredGLMM(VI.n1)
+summary(PRED.n1)
+r.squaredGLMM(PRED.n1)
 
-pdf(file.path("Figures", "EVITile", "ARITH_Mean.pdf"))
-NEWplot_lmer_means(VI.n1, var.of.interest = "Arith.NDVI.mean", var.interaction = "Higher_taxon", length = 50, ylabel = "Species Richness", xlabel = "Mean NDVI (arithmetic mean)", CIcol = higher_taxon_cols, meancol = higher_taxon_cols, line.width = 2)
-legend("topright", legend = levels(PRED$Higher_taxon), col = higher_taxon_cols, lwd = 2)
+pdf(file.path("Figures", "NDVITile", "ARITH_Mean.pdf"))
+PlotContEffects(PRED.n1, data = PRED,effects = "Arith.NDVI.mean", xlab = "Mean NDVI (Arithmetic mean)", ylab = "Species Richness", 
+	byFactor="Higher_taxon", logLink="e",plotRug=FALSE,seMultiplier=1.96, params=list(),axis.log="y",ylim=NULL,
+	line.cols=cols_higher_taxon)
+legend("topleft", legend = levels(PRED$Higher_taxon), col = cols_higher_taxon, lwd = 4)
 dev.off()
 
 
 
 #yield
 
-VI.n2 <- glmer(Species_richness ~ Arith.NDVI.yield * Higher_taxon + (1|SS), data = PRED, family = poisson, control = glmerControl(optimizer="bobyqa", optCtrl = list(maxfun = 100000)))
+PRED.n2 <- glmer(Species_richness ~ Arith.NDVI.yield * Higher_taxon + (1|SS), data = PRED, family = poisson, control = glmerControl(optimizer="bobyqa", optCtrl = list(maxfun = 100000)))
 
-VI.n2b <- glmer(Species_richness ~ Arith.NDVI.yield + Higher_taxon + (1|SS), data = PRED, family = poisson, control = glmerControl(optimizer="bobyqa", optCtrl = list(maxfun = 100000))) 
-anova(VI.n2, VI.n2b) ## significant
+PRED.n2b <- glmer(Species_richness ~ Arith.NDVI.yield + Higher_taxon + (1|SS), data = PRED, family = poisson, control = glmerControl(optimizer="bobyqa", optCtrl = list(maxfun = 100000))) 
+anova(PRED.n2, PRED.n2b) ## significant
 
-summary(VI.n2)
-r.squaredGLMM(VI.n2)
+summary(PRED.n2)
+r.squaredGLMM(PRED.n2)
 
-pdf(file.path("Figures", "EVITile", "ARITH_yield.pdf"))
-NEWplot_lmer_means(VI.n2, var.of.interest = "Arith.NDVI.yield", var.interaction = "Higher_taxon", length = 50, ylabel = "Species Richness", xlabel = "NDVI yield (arithmetic mean)", CIcol = higher_taxon_cols, meancol = higher_taxon_cols, line.width = 2)
-legend("topright", legend = levels(PRED$Higher_taxon), col = higher_taxon_cols, lwd = 2)
+pdf(file.path("Figures", "NDVITile", "ARITH_yield.pdf"))
+PlotContEffects(PRED.n2, data = PRED,effects = "Arith.NDVI.yield", xlab = "NDVI yield (Arithmetic mean)", ylab = "Species Richness", 
+	byFactor="Higher_taxon", logLink="e",plotRug=FALSE,seMultiplier=1.96, params=list(),axis.log="y",ylim=NULL,
+	line.cols=cols_higher_taxon)
+legend("topleft", legend = levels(PRED$Higher_taxon), col = cols_higher_taxon, lwd = 4)
 dev.off()
 
 #max
-VI.n3 <- glmer(Species_richness ~ Arith.max.NDVI * Higher_taxon + (1|SS), data = PRED, family = poisson, control = glmerControl(optimizer="bobyqa", optCtrl = list(maxfun = 100000))) 
-VI.n3b <- glmer(Species_richness ~ Arith.max.NDVI + Higher_taxon + (1|SS), data = PRED, family = poisson, control = glmerControl(optimizer="bobyqa", optCtrl = list(maxfun = 100000)))
-anova(VI.n3, VI.n3b) ## significant
-summary(VI.n3)
-r.squaredGLMM(VI.n3)
+PRED.n3 <- glmer(Species_richness ~ Arith.max.NDVI * Higher_taxon + (1|SS), data = PRED, family = poisson, control = glmerControl(optimizer="bobyqa", optCtrl = list(maxfun = 100000))) 
+PRED.n3b <- glmer(Species_richness ~ Arith.max.NDVI + Higher_taxon + (1|SS), data = PRED, family = poisson, control = glmerControl(optimizer="bobyqa", optCtrl = list(maxfun = 100000)))
+anova(PRED.n3, PRED.n3b) ## significant
+summary(PRED.n3)
+r.squaredGLMM(PRED.n3)
 
-pdf(file.path("Figures", "EVITile", "ARITH_max.pdf"))
-NEWplot_lmer_means(VI.n3, var.of.interest = "Arith.max.NDVI", var.interaction = "Higher_taxon", length = 50, ylabel = "Species Richness", xlabel = "Max NDVI (arithmetic mean)", CIcol = higher_taxon_cols, meancol = higher_taxon_cols, line.width = 2)
-legend("topright", legend = levels(PRED$Higher_taxon), col = higher_taxon_cols, lwd = 2)
+pdf(file.path("Figures", "NDVITile", "ARITH_max.pdf"))
+PlotContEffects(PRED.n3, data = PRED,effects = "Arith.max.NDVI", xlab = "Maximum NDVI (Arithmetic mean)", ylab = "Species Richness", 
+	byFactor="Higher_taxon", logLink="e",plotRug=FALSE,seMultiplier=1.96, params=list(),axis.log="y",ylim=NULL,
+	line.cols=cols_higher_taxon)
+legend("topleft", legend = levels(PRED$Higher_taxon), col = cols_higher_taxon, lwd = 4)
 dev.off()
 
 
 
 # Weighted (exponential decay model)
 #mean
-VI.n4 <- glmer(Species_richness ~ Weighted.mean.NDVI * Higher_taxon + (1|SS), data = PRED, family = poisson, control = glmerControl(optimizer="bobyqa", optCtrl = list(maxfun = 100000)))
+PRED.n4 <- glmer(Species_richness ~ Weighted.mean.NDVI * Higher_taxon + (1|SS), data = PRED, family = poisson, control = glmerControl(optimizer="bobyqa", optCtrl = list(maxfun = 100000)))
 
-VI.n4b <- glmer(Species_richness ~ Weighted.mean.NDVI + Higher_taxon + (1|SS), data = PRED, family = poisson, control = glmerControl(optimizer="bobyqa", optCtrl = list(maxfun = 100000)))
-anova(VI.n4, VI.n4b) # significant
-summary(VI.n4)
-r.squaredGLMM(VI.n4)
+PRED.n4b <- glmer(Species_richness ~ Weighted.mean.NDVI + Higher_taxon + (1|SS), data = PRED, family = poisson, control = glmerControl(optimizer="bobyqa", optCtrl = list(maxfun = 100000)))
+anova(PRED.n4, PRED.n4b) # significant
+summary(PRED.n4)
+r.squaredGLMM(PRED.n4)
 
-pdf(file.path("Figures", "EVITile", "WEIGHTED_mean.pdf"))
-NEWplot_lmer_means(VI.n4, var.of.interest = "Weighted.mean.NDVI", var.interaction = "Higher_taxon", length = 50, ylabel = "Species Richness", xlabel = "Mean NDVI (weighted mean)", CIcol = higher_taxon_cols, meancol = higher_taxon_cols, line.width = 2)
-legend("topright", legend = levels(PRED$Higher_taxon), col = higher_taxon_cols, lwd = 2)
+pdf(file.path("Figures", "NDVITile", "WEIGHTED_mean.pdf"))
+PlotContEffects(PRED.n4, data = PRED,effects = "Weighted.mean.NDVI", xlab = "Mean NDVI (Weighted mean)", ylab = "Species Richness", 
+	byFactor="Higher_taxon", logLink="e",plotRug=FALSE,seMultiplier=1.96, params=list(),axis.log="y",ylim=NULL,
+	line.cols=cols_higher_taxon)
+legend("topleft", legend = levels(PRED$Higher_taxon), col = cols_higher_taxon, lwd = 4)
 dev.off()
 
 #yield
 
-VI.n5 <- glmer(Species_richness ~ Weighted.NDVI.yield * Higher_taxon + (1|SS), data = PRED, family = poisson, control = glmerControl(optimizer="bobyqa", optCtrl = list(maxfun = 100000)))
+PRED.n5 <- glmer(Species_richness ~ Weighted.NDVI.yield * Higher_taxon + (1|SS), data = PRED, family = poisson, control = glmerControl(optimizer="bobyqa", optCtrl = list(maxfun = 100000)))
 
-VI.n5b <- glmer(Species_richness ~ Weighted.NDVI.yield + Higher_taxon + (1|SS), data = PRED, family = poisson, control = glmerControl(optimizer="bobyqa", optCtrl = list(maxfun = 100000)))
-anova(VI.n5, VI.n5b) ## significant
-summary(VI.n5)
-r.squaredGLMM(VI.n5)
+PRED.n5b <- glmer(Species_richness ~ Weighted.NDVI.yield + Higher_taxon + (1|SS), data = PRED, family = poisson, control = glmerControl(optimizer="bobyqa", optCtrl = list(maxfun = 100000)))
+anova(PRED.n5, PRED.n5b) ## significant
+summary(PRED.n5)
+r.squaredGLMM(PRED.n5)
 
 
-pdf(file.path("Figures", "EVITile", "WEIGHTED_yield.pdf"))
-NEWplot_lmer_means(VI.n5, var.of.interest = "Weighted.NDVI.yield", var.interaction = "Higher_taxon", length = 50, ylabel = "Species Richness", xlabel = "NDVI yield (weighted mean)", CIcol = higher_taxon_cols, meancol = higher_taxon_cols, line.width = 2)
-legend("topright", legend = levels(PRED$Higher_taxon), col = higher_taxon_cols, lwd = 2)
+pdf(file.path("Figures", "NDVITile", "WEIGHTED_yield.pdf"))
+PlotContEffects(PRED.n5, data = PRED,effects = "Weighted.NDVI.yield", xlab = "NDVI yield (Weighted mean)", ylab = "Species Richness", 
+	byFactor="Higher_taxon", logLink="e",plotRug=FALSE,seMultiplier=1.96, params=list(),axis.log="y",ylim=NULL,
+	line.cols=cols_higher_taxon)
+legend("topleft", legend = levels(PRED$Higher_taxon), col = cols_higher_taxon, lwd = 4)
 dev.off()
 
 
 #max
-VI.n6 <- glmer(Species_richness ~ Weighted.max.NDVI * Higher_taxon + (1|SS), data = PRED, family = poisson, control = glmerControl(optimizer="bobyqa", optCtrl = list(maxfun = 100000))) # 
-VI.n6b <- glmer(Species_richness ~ Weighted.max.NDVI + Higher_taxon + (1|SS), data = PRED, family = poisson, control = glmerControl(optimizer="bobyqa", optCtrl = list(maxfun = 100000)))
-anova(VI.e6, VI.e6b) ## significant
-summary(VI.n6)
-r.squaredGLMM(VI.n6)
+PRED.n6 <- glmer(Species_richness ~ Weighted.max.NDVI * Higher_taxon + (1|SS), data = PRED, family = poisson, control = glmerControl(optimizer="bobyqa", optCtrl = list(maxfun = 100000))) # 
+PRED.n6b <- glmer(Species_richness ~ Weighted.max.NDVI + Higher_taxon + (1|SS), data = PRED, family = poisson, control = glmerControl(optimizer="bobyqa", optCtrl = list(maxfun = 100000)))
+anova(PRED.e6, PRED.e6b) ## significant
+summary(PRED.n6)
+r.squaredGLMM(PRED.n6)
 
 
-pdf(file.path("Figures", "EVITile", "WEIGHTED_max.pdf"))
-NEWplot_lmer_means(VI.n6, var.of.interest = "Weighted.max.NDVI", var.interaction = "Higher_taxon", length = 50, ylabel = "Species Richness", xlabel = "Max NDVI (weighted mean)", CIcol = higher_taxon_cols, meancol = higher_taxon_cols, line.width = 2)
-legend("topright", legend = levels(PRED$Higher_taxon), col = higher_taxon_cols, lwd = 2)
+pdf(file.path("Figures", "NDVITile", "WEIGHTED_max.pdf"))
+PlotContEffects(PRED.n6, data = PRED,effects = "Weighted.max.NDVI", xlab = "Maximum NDVI (Weighted mean)", ylab = "Species Richness", 
+	byFactor="Higher_taxon", logLink="e",plotRug=FALSE,seMultiplier=1.96, params=list(),axis.log="y",ylim=NULL,
+	line.cols=cols_higher_taxon)
+legend("topleft", legend = levels(PRED$Higher_taxon), col = cols_higher_taxon, lwd = 4)
 dev.off()
 
+
+## Supplementary Figures
+pdf(file.path("Figures", "SupplementaryFigures", "NDVITile.pdf"), height = 11.7, width = 8.3)
+
+par(mfrow=c(3,2))
+PlotContEffects(PRED.n3, data = PRED,effects = "Arith.max.NDVI", xlab = "Maximum NDVI (Arithmetic mean)", ylab = "Species Richness", 
+	byFactor="Higher_taxon", logLink="e",plotRug=FALSE,seMultiplier=1.96, params=list(),axis.log="y",ylim=NULL,
+	line.cols=cols_higher_taxon)
+legend("topleft", legend = levels(PRED$Higher_taxon), col = cols_higher_taxon, lwd = 4)
+mtext("(a) ", side=3, line=-1.5, adj=1.0, cex=1.2)
+
+PlotContEffects(PRED.n6, data = PRED,effects = "Weighted.max.NDVI", xlab = "Maximum NDVI (Weighted mean)", ylab = "Species Richness", 
+	byFactor="Higher_taxon", logLink="e",plotRug=FALSE,seMultiplier=1.96, params=list(),axis.log="y",ylim=NULL,
+	line.cols=cols_higher_taxon)
+legend("topleft", legend = levels(PRED$Higher_taxon), col = cols_higher_taxon, lwd = 4)
+mtext("(b) ", side=3, line=-1.5, adj=1.0, cex=1.2)
+
+PlotContEffects(PRED.n1, data = PRED,effects = "Arith.NDVI.mean", xlab = "Mean NDVI (Arithmetic mean)", ylab = "Species Richness", 
+	byFactor="Higher_taxon", logLink="e",plotRug=FALSE,seMultiplier=1.96, params=list(),axis.log="y",ylim=NULL,
+	line.cols=cols_higher_taxon)
+legend("topleft", legend = levels(PRED$Higher_taxon), col = cols_higher_taxon, lwd = 4)
+mtext("(c) ", side=3, line=-1.5, adj=1.0, cex=1.2)
+
+
+PlotContEffects(PRED.n4, data = PRED,effects = "Weighted.mean.NDVI", xlab = "Mean NDVI (Weighted mean)", ylab = "Species Richness", 
+	byFactor="Higher_taxon", logLink="e",plotRug=FALSE,seMultiplier=1.96, params=list(),axis.log="y",ylim=NULL,
+	line.cols=cols_higher_taxon)
+legend("topleft", legend = levels(PRED$Higher_taxon), col = cols_higher_taxon, lwd = 4)
+mtext("(d) ", side=3, line=-1.5, adj=1.0, cex=1.2)
+
+PlotContEffects(PRED.n2, data = PRED,effects = "Arith.NDVI.yield", xlab = "NDVI yield (Arithmetic mean)", ylab = "Species Richness", 
+	byFactor="Higher_taxon", logLink="e",plotRug=FALSE,seMultiplier=1.96, params=list(),axis.log="y",ylim=NULL,
+	line.cols=cols_higher_taxon)
+legend("topleft", legend = levels(PRED$Higher_taxon), col = cols_higher_taxon, lwd = 4)
+mtext("(e) ", side=3, line=-1.5, adj=1.0, cex=1.2)
+
+
+PlotContEffects(PRED.n5, data = PRED,effects = "Weighted.NDVI.yield", xlab = "NDVI yield (Weighted mean)", ylab = "Species Richness", 
+	byFactor="Higher_taxon", logLink="e",plotRug=FALSE,seMultiplier=1.96, params=list(),axis.log="y",ylim=NULL,
+	line.cols=cols_higher_taxon)
+legend("topleft", legend = levels(PRED$Higher_taxon), col = cols_higher_taxon, lwd = 4)mtext("(a) ", side=3, line=-1.5, adj=1.0, cex=1.5)
+mtext("(f) ", side=3, line=-1.5, adj=1.0, cex=1.2)
+
+dev.off()
